@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/MninaTB/bookings/pkg/config"
-	"github.com/MninaTB/bookings/pkg/handlers"
-	"github.com/MninaTB/bookings/pkg/render"
+	"github.com/MninaTB/bookings/internal/config"
+	"github.com/MninaTB/bookings/internal/handlers"
+	"github.com/MninaTB/bookings/internal/render"
 	"github.com/alexedwards/scs/v2"
 )
 

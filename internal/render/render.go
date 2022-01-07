@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/MninaTB/bookings/pkg/config"
-	"github.com/MninaTB/bookings/pkg/models"
+	"github.com/MninaTB/bookings/internal/config"
+	"github.com/MninaTB/bookings/internal/models"
+	"github.com/justinas/nosurf"
 )
 
 // this is needed, so we can pass our own functions into the templates
@@ -23,12 +24,13 @@ func NewTemplates(a *config.AppConfig) {
 }
 
 // AddDefaultData returns the default template data that we want to be able to pass to every template
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
 // RenderTemplate renders templates using html/template
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 
 	// check if the developement mode is on (UseCache would be false in the
@@ -51,7 +53,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 	buf := new(bytes.Buffer)
 
 	// default data were passed to the template
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	// the current used template gets stored in bytes
 	_ = t.Execute(buf, td)
