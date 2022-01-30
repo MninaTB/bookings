@@ -17,6 +17,7 @@ import (
 var functions = template.FuncMap{}
 
 var app *config.AppConfig
+var pathToTemplates = "./templates"
 
 // NewTemplates sets the config for the template package
 func NewTemplates(a *config.AppConfig) {
@@ -74,7 +75,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	// This Map holds the ready to use templates and is searchable through the pagenames
 	myChache := map[string]*template.Template{}
 
-	pages, err := filepath.Glob("./templates/*.page.html")
+	pages, err := filepath.Glob(fmt.Sprintf("%s/*.page.html", pathToTemplates))
 	if err != nil {
 		return myChache, err
 	}
@@ -91,13 +92,13 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 
 		// looking if this template matches any layouts
 		// - so we are checking if we should use a layout to this template
-		matches, err := filepath.Glob("./templates/*.layout.html")
+		matches, err := filepath.Glob(fmt.Sprintf("%s/*.layout.html", pathToTemplates))
 		if err != nil {
 			return myChache, err
 		}
 
 		if len(matches) > 0 {
-			ts, err = ts.ParseGlob("./templates/*.layout.html")
+			ts, err = ts.ParseGlob(fmt.Sprintf("%s/*.layout.html", pathToTemplates))
 			if err != nil {
 				return myChache, err
 			}
